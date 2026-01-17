@@ -1,6 +1,7 @@
 import React from "react"
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom"
 import { DeckOverview } from "./components/DeckOverview.jsx"
+import { DeckList } from "./components/DeckList.jsx"
 
 function Layout() {
   return (
@@ -22,7 +23,8 @@ function DecksPage() {
   return ( 
   <>
   <div>Decks page</div>
-  <DeckOverview />
+  <DeckList />
+  {/* <DeckOverview /> */}
   </>
   )
 

@@ -35,3 +35,25 @@ authRouter.post("/login", async (req, res) => {
   const token = signToken(user._id.toString())
   res.json({ token, user: { id: user._id, email: user.email, displayName: user.displayName } })
 })
+
+authRouter.post("/dev-login", async (req, res) => {
+  const normalized = "dev@local.test"
+
+  let user = await User.findOne({ email: normalized })
+
+  if (!user) {
+    const passwordHash = await bcrypt.hash("devpassword123", 10)
+
+    user = await User.create({
+      email: normalized,
+      passwordHash,
+      displayName: "Dev User"
+    })
+  }
+
+  const token = signToken(user._id.toString())
+  res.json({
+    token,
+    user: { id: user._id, email: user.email, displayName: user.displayName }
+  })
+})

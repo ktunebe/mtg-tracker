@@ -8,29 +8,20 @@ const colorMap = {
   B: "/mana-b.svg",
   G: "/mana-g.svg"
 };
-const deck = {
-  name: "White Red Deck", 
-  colors: ["R", "W"],
-  mainboard: [
-    { cardId: "card1", qty: 4 },
-    { cardId: "card2", qty: 4 },
-    { cardId: "card3", qty: 4 }
-  ],
-  createdBy: "user123"
-}
 
-export function DeckOverview() {
+
+export function DeckOverview({ deck }) {
   return (
-    <div className='flex flex-col justify-center items-center gap-2 border p-4 max-w-60 bg-mtg-red'>
-      <h2>{deck.name}</h2>
+    <div className='flex flex-col justify-center items-center gap-2 border p-4 max-w-60'>
+      <h2 className='text-center'>{deck.name}</h2>
       <img 
-        src={deck.mainboard[0].cardId.img || "/card-placeholder.png"} className="max-w-48" />
+        src="/card-placeholder.png" className="max-w-48" />
       <div>
         {deck.colors.map((color) => (
           <img src={colorMap[color]} key={color} className="inline-block h-6 w-6 mx-1" />
         ))}
       </div>
-      <p>{deck.createdBy}</p>
+      <p>{deck.createdBy.displayName}</p>
     </div>
   )
 }

@@ -35,4 +35,4 @@ const CardSchema = new mongoose.Schema(
 // Helpful compound index for alternate lookup
 CardSchema.index({ set: 1, collectorNumber: 1 })
 
-export default mongoose.model("Card", CardSchema)
+export const Card = mongoose.model("Card", CardSchema)
