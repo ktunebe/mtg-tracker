@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 const CardLineSchema = new mongoose.Schema(
   {
-    cardId: { type: String, required: true }, // later: Scryfall ID
+    cardId: { type: String, required: true }, // Scryfall ID
     qty: { type: Number, required: true, min: 1 }
   },
   { _id: false }
@@ -11,7 +11,6 @@ const CardLineSchema = new mongoose.Schema(
 const DeckSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    format: { type: String, default: "Modern" },
     colors: { type: [String], default: [] }, // optional ["U","R"]
     mainboard: { type: [CardLineSchema], default: [] },
     sideboard: { type: [CardLineSchema], default: [] },
