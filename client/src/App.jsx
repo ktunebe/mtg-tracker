@@ -1,7 +1,7 @@
 import React from "react"
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from "react-router-dom"
-import { DeckOverview } from "./components/DeckOverview.jsx"
 import { DeckList } from "./components/DeckList.jsx"
+import { DeckView } from "./components/DeckView.jsx"
 
 function Layout() {
   return (
@@ -24,7 +24,16 @@ function DecksPage() {
   <>
   <div>Decks page</div>
   <DeckList />
-  {/* <DeckOverview /> */}
+  </>
+  )
+
+}
+
+function DeckPage() {
+  return ( 
+  <>
+  <div>Decks page</div>
+  <DeckView />
   </>
   )
 
@@ -41,6 +50,7 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/decks" replace />} />
           <Route path="decks" element={<DecksPage />} />
+          <Route path="decks/:id" element={<DeckPage />} />
           <Route path="salt" element={<SaltPage />} />
         </Route>
       </Routes>

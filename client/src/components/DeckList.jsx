@@ -1,7 +1,7 @@
 // client/src/pages/DecksPage.jsx
 import { useEffect, useState } from "react"
 import { apiFetch } from "../lib/api.js"
-import { DeckOverview } from "./DeckOverview.jsx"
+import { DeckListItem } from "./DeckListItem.jsx"
 
 export function DeckList() {
   const [decks, setDecks] = useState([])
@@ -33,7 +33,7 @@ export function DeckList() {
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {decks.map((deck) => (
-          <DeckOverview key={deck._id} deck={deck} />
+          <DeckListItem key={deck._id} deck={deck} />
         ))}
       </div>
     </div>
