@@ -4,7 +4,7 @@ const SaltVoteSchema = new mongoose.Schema(
   {
     userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     cardId: { type: String, required: true },
-    value: { type: Number, default: 1, min: 0, max: 5 }
+    value: { type: Number, default: 0, min: 0, max: 5 }
   },
   { timestamps: true }
 )
