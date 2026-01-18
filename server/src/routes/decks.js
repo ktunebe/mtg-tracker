@@ -66,11 +66,32 @@ async function fetchScryfallCollection(identifiers) {
   return res.json()
 }
 
+function computeSortingType(typeLine = "") {
+  // type_line looks like: "Legendary Artifact Creature — Human Soldier"
+  const left = String(typeLine).split("—")[0] // only the "types" part
+  const types = left.trim().toLowerCase().split(/\s+/)
+
+  const has = (t) => types.includes(t)
+
+  // Precedence to force one bucket
+  if (has("land")) return "land"
+  if (has("creature")) return "creature"
+  if (has("planeswalker")) return "planeswalker"
+  if (has("instant")) return "instant"
+  if (has("sorcery")) return "sorcery"
+  if (has("artifact")) return "artifact"
+  if (has("enchantment")) return "enchantment"
+
+  return "other"
+}
+
 function pickCardFields(card) {
   const face0 =
     Array.isArray(card.card_faces) && card.card_faces.length ? card.card_faces[0] : null
 
   const image_uris = card.image_uris ?? face0?.image_uris ?? {}
+
+  const typeLine = card.type_line ?? face0?.type_line ?? ""
 
   return {
     scryfallId: card.id,
@@ -80,7 +101,7 @@ function pickCardFields(card) {
     collectorNumber: String(card.collector_number),
 
     manaCost: card.mana_cost ?? face0?.mana_cost ?? "",
-    typeLine: card.type_line ?? face0?.type_line ?? "",
+    typeLine,
     oracleText: card.oracle_text ?? face0?.oracle_text ?? "",
 
     colors: card.colors ?? face0?.colors ?? [],
@@ -92,9 +113,12 @@ function pickCardFields(card) {
     rarity: card.rarity ?? "",
     scryfallUri: card.scryfall_uri ?? "",
 
+    sortingType: computeSortingType(typeLine),
+
     updatedAtScryfall: null
   }
 }
+
 
 function buildCardsMap(cards) {
   const map = {}
