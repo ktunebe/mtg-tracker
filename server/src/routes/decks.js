@@ -11,7 +11,8 @@ decksRouter.use(requireAuth)
 // -------------------------
 // Helpers
 // -------------------------
-const LINE_RE = /^\s*(\d+)\s+(.+?)\s+\(([A-Za-z0-9]{2,6})\)\s+([A-Za-z0-9]+)\s*$/
+const LINE_RE =
+  /^\s*(\d+)\s+(.+?)\s+\(([A-Za-z0-9]{2,6})\)\s+([A-Za-z0-9-]+)\s*(?:\*.*\*)?\s*$/
 
 function parseMoxfieldText(text) {
   const lines = String(text ?? "")
@@ -32,7 +33,7 @@ function parseMoxfieldText(text) {
     const qty = Number(m[1])
     const name = m[2]
     const set = m[3].toLowerCase()
-    const collector_number = m[4] // string
+    const collector_number = m[4] // string, can include "-"
 
     if (!Number.isFinite(qty) || qty < 1) {
       errors.push({ line, reason: "Invalid quantity" })
@@ -44,6 +45,7 @@ function parseMoxfieldText(text) {
 
   return { parsed, errors }
 }
+
 
 function chunk(arr, size) {
   const out = []
