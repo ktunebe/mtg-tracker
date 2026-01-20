@@ -10,6 +10,9 @@ const initialFormData = {
 	displayName: '',
 }
 
+
+
+
 export function AuthPage({ mode }) {
 	const navigate = useNavigate()
 	const [formData, setFormData] = React.useState(initialFormData)
@@ -64,52 +67,54 @@ export function AuthPage({ mode }) {
 	}
 
 	return (
-		<div>
-			<Link to="/login">
-				<Button>Login</Button>
-			</Link>
-			<Link to="/signup">
-				<Button>Sign Up</Button>
-			</Link>
-			<form onSubmit={handleSubmit} className="flex flex-col gap-3">
-				<div>
+		<div className='border-4 rounded-3xl border-r-mtg-blu border-l-mtg-grn border-t-red-900 border-b-mtg-wht shadow-[0_15px_25px_#F8F6D8,15px_0_25px_#0E68AB,-15px_0_25px_#00733E,0_-15px_25px_#D3202A] mt-16 max-w-3/4 lg:max-w-3/5 mx-auto flex flex-col items-center justify-between'>
+			<div className='flex w-full'>
+				<Link to="/login" className='w-1/2'>
+					<Button className={`w-full rounded-tl-2xl ${mode === 'login' ? 'bg-red-900 hover:bg-red-900' : 'bg-bg hover:bg-surface2'}`}>Login</Button>
+				</Link>
+				<Link to="/signup" className='w-1/2'>
+					<Button className={`w-full rounded-tr-2xl ${mode === 'signup' ? 'bg-red-900 hover:bg-red-900' : 'bg-bg hover:bg-surface2'}`}>Sign Up</Button>
+				</Link>
+			</div>
+			<form onSubmit={handleSubmit} className="flex flex-col gap-3 p-8">
+				<div className='flex flex-col'>
 					<label htmlFor="email">Email: </label>
 					<input
 						type="text"
 						name="email"
 						value={formData.email}
 						onChange={handleFormChange}
-						className="border border-white"
+						className="border border-white px-1"
 					/>
 				</div>
-				<div>
+				<div className='flex flex-col'>
 					<label htmlFor="password">Password: </label>
 					<input
 						type="text"
 						name="password"
 						value={formData.password}
 						onChange={handleFormChange}
-						className="border border-white"
+						className="border border-white px-1"
 					/>
 				</div>
 				{mode === 'signup' && (
-					<div>
+					<div className='flex flex-col'>
 						<label htmlFor="displayName">Select a display name:</label>
 						<input
 							type="text"
 							name="displayName"
 							value={formData.displayName}
 							onChange={handleFormChange}
-							className="border border-white"
+							className="border border-white px-1"
 						/>
 					</div>
 				)}
-				<Button type="submit" disabled={loading}>
+				<Button type="submit" disabled={loading} variant='secondary'>
 					{loading
 						? 'Working...'
 						: mode === 'signup'
 							? 'Create account'
-							: 'Login'}
+							: 'Log in'}
 				</Button>
 			</form>
 		</div>
