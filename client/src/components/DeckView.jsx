@@ -10,6 +10,22 @@ export function DeckView() {
 	const [error, setError] = React.useState(null)
 	const [cardOpen, setCardOpen] = React.useState(null)
 
+  // helper to update a single card in the map
+const updateCardInDeck = React.useCallback((updatedCard, saltScore) => {
+  setDeckData((prev) => {
+    if (!prev) return prev
+    const nextCards = {
+      ...prev.cards,
+      [updatedCard.scryfallId]: {
+        ...prev.cards[updatedCard.scryfallId],
+        ...updatedCard,
+        saltScore // optional: store it client-side for display
+      }
+    }
+    return { ...prev, cards: nextCards }
+  })
+}, [])
+
 	React.useEffect(() => {
 		apiFetch(`/api/decks/${id}`)
 			.then(setDeckData)
@@ -34,11 +50,6 @@ export function DeckView() {
 		other: 'Other',
 	}
 
-	console.log(sections)
-	console.log(label)
-
-	console.log(openCard)
-
 	return (
 		<div className="relative">
 			<h1 className="text-xl font-semibold mb-4">{deck.name}</h1>
@@ -49,6 +60,7 @@ export function DeckView() {
 					card={openCard}
 					onClose={() => setCardOpen(null)}
 					isOpen={!!openCard}
+          onVoteApplied={(payload) => updateCardInDeck(payload.card, payload.saltScore)}
 				/>
 			)}
 
@@ -62,7 +74,7 @@ export function DeckView() {
 								<button
 									type="button"
 									onClick={() => setCardOpen(line.scryfallId)}
-									className="text-left hover:underline">
+									className="text-left hover:underline hover:cursor-pointer">
 									{card?.name ?? 'Unknown card'}
 								</button>
 							</li>
@@ -70,23 +82,6 @@ export function DeckView() {
 					</ul>
 				</div>
 			))}
-
-			{/* <ul className="space-y-2">
-				{deck.mainboard.map((line) => {
-					const card = cards[line.scryfallId]
-					return (
-						<li key={line.scryfallId} className="flex gap-2">
-							<span className="w-10 text-right font-mono">{line.qty}x</span>
-							<button
-								type="button"
-								onClick={() => setCardOpen(line.scryfallId)}
-								className="text-left hover:underline">
-								{card?.name ?? 'Unknown card'}
-							</button>
-						</li>
-					)
-				})}
-			</ul> */}
 		</div>
 	)
 }

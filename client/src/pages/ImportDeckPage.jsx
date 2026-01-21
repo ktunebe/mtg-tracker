@@ -41,7 +41,6 @@ export function ImportDeckPage() {
       navigate(`/decks/${data.deck._id}`)
     } catch (e2) {
       setError(e2.message)
-      console.log(e2.details)
     } finally {
       setLoading(false)
     }
@@ -50,26 +49,30 @@ export function ImportDeckPage() {
   }
 
 	return (
-		<div>
-			<h2>Submit a Deck</h2>
-			<form onSubmit={handleSubmit} className="flex flex-col gap-3">
-				<label htmlFor="name">Deck Name: </label>
-				<input
-					type="text"
-					name="name"
-					value={formData.name}
-					onChange={handleFormChange}
-					className="border border-white"
-				/>
-				<label htmlFor="deckText">Moxfield Deck Export Text: </label>
-				<textarea
-					type="text"
-					name="deckText"
-					value={formData.deckText}
-					onChange={handleFormChange}
-					className="border border-white"
-				/>
-				<Button type="submit" disabled={loading}>
+		<div className='border-4 rounded-3xl bg-bg border-r-mtg-blu border-l-mtg-grn border-t-red-900 border-b-mtg-wht shadow-[0_15px_25px_#F8F6D8,15px_0_25px_#0E68AB,-15px_0_25px_#00733E,0_-15px_25px_#D3202A] mt-16 max-w-3/4 lg:max-w-3/5 mx-auto flex flex-col items-center justify-between gap-4 p-6'>
+			<h2 className='text-3xl font-bold'>Deck Info</h2>
+			<form onSubmit={handleSubmit} className="flex flex-col gap-4 w-2/3">
+				<div className='flex flex-col'>
+          <label htmlFor="name">Deck Name: </label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleFormChange}
+            className="border border-white"
+          />
+        </div>
+				<div className="flex flex-col">
+          <label htmlFor="deckText">Moxfield Deck Export Text: </label>
+          <textarea
+            type="text"
+            name="deckText"
+            value={formData.deckText}
+            onChange={handleFormChange}
+            className="border border-white min-h-32"
+          />
+        </div>
+				<Button type="submit" variant='secondary' disabled={loading}>
 					{loading ? 'Working...' : 'Submit'}
 				</Button>
 			</form>

@@ -1,8 +1,9 @@
 import React from 'react'
 import { Button } from './Button.jsx'
 import { apiFetch } from '../lib/api.js'
+import {range} from '../lib/utils.js'
 
-export function CardModal({ card, onClose, isOpen }) {
+export function CardModal({ card, onClose, isOpen, onVoteApplied }) {
 	const [mySaltScore, setMySaltScore] = React.useState(0)
 	const [error, setError] = React.useState('')
 	const [loading, setLoading] = React.useState(false)
@@ -36,6 +37,8 @@ export function CardModal({ card, onClose, isOpen }) {
 				body: JSON.stringify({ value }),
 			})
 			setMySaltScore(data.vote?.value ?? value)
+      // tell parent to update the card map
+      onVoteApplied?.(data)
 		} catch (e) {
 			setError(e.message)
 		} finally {
@@ -69,7 +72,7 @@ export function CardModal({ card, onClose, isOpen }) {
 				className="fixed inset-0 z-40 bg-bg opacity-50"
 				aria-label="Close card preview"
 			/>
-			<div className="fixed z-50 left-1/2 top-24 -translate-x-1/2 w-4/5 lg:w-2/3 2xl:w-3/5 rounded-xl shadow-xl flex flex-col gap-4 p-4 bg-mtg-blu">
+			<div className="fixed z-50 left-1/2 top-24 -translate-x-1/2 w-9/10 lg:w-2/3 2xl:w-3/5 rounded-xl shadow-xl flex flex-col gap-4 p-4 bg-mtg-blu">
 				<Button
 					size="sm"
 					variant="primary"
@@ -93,39 +96,46 @@ export function CardModal({ card, onClose, isOpen }) {
 						<p className="whitespace-pre-line mb-6 px-4 md:px-0 md:pr-8">
 							{card.oracleText}
 						</p>
-						<div className="flex flex-col min-[535px]:flex-row gap-2 justify-between mt-auto w-full">
-							<p className="self-center">
-								<strong>
+						<div className="flex flex-col gap-2 mt-auto w-full">
+							<div className="">
+								<span className='font-bold'>
 									Salt Score:
-									<span className="tracking-[-.5rem]">
-										{card.saltTotal ? `${card.saltTotal}` : '0'}
-									</span>
-								</strong>
-							</p>
-							<div className="flex flex-col min-[535px]:flex-row gap-1">
+                  {' '}
+									{card.saltScore > 0 ? 
+                  range(Math.ceil(card.saltScore)).map((salt) => (
+                    <span key={salt} className="tracking-[-.4rem]">🧂</span>
+                  ))
+                  : <span>0️⃣</span>
+                }
+								</span>
+							</div>
+							<div className="flex items-center gap-1">
+                <span className='self-start font-bold'>
+                  My Vote: 
+                </span>
 								<Button
 									size="sm"
 									variant="primary"
-									className={`${mySaltScore === 1 ? "border border-red-500" : ""} self-center`}
+									className={`${mySaltScore === 1 ? "border border-red-500" : ""} self-start`}
 									disabled={loading}
 									onClick={() => setVote(1)}>
-									+🧂
+									🧂
 								</Button>
 								<Button
 									size="sm"
 									variant="primary"
-									className={`${mySaltScore === 2 ? "border border-red-500" : ""} self-center`}
+									className={`${mySaltScore === 2 ? "border border-red-500" : ""} self-start`}
 									disabled={loading}
 									onClick={() => setVote(2)}>
-									++🧂
+									🧂🧂
 								</Button>
 								<Button
 									size="sm"
 									variant="primary"
-									className={`${mySaltScore === 0 ? "border border-red-500" : ""} self-center`}
+									className={`${mySaltScore === 0 ? "border border-red-500" : ""} self-start`}
 									disabled={loading}
 									onClick={() => setVote(0)}>
-									Remove Salt
+									0️⃣
 								</Button>
 							</div>
 						</div>
