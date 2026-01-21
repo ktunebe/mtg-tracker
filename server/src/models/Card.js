@@ -27,7 +27,9 @@ const CardSchema = new mongoose.Schema(
     scryfallUri: { type: String, default: "" },   // link to scryfall page
 
     // Refresh control (optional)
-    updatedAtScryfall: { type: Date, default: null }
+    updatedAtScryfall: { type: Date, default: null },
+    // Salt Score
+    saltTotal: { type: Number, default: 0 },
   },
   { timestamps: true }
 )

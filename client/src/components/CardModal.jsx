@@ -1,7 +1,48 @@
 import React from 'react'
-import {Button} from './Button.jsx'
+import { Button } from './Button.jsx'
+import { apiFetch } from '../lib/api.js'
 
 export function CardModal({ card, onClose, isOpen }) {
+	const [mySaltScore, setMySaltScore] = React.useState(0)
+	const [error, setError] = React.useState('')
+	const [loading, setLoading] = React.useState(false)
+
+	React.useEffect(() => {
+		if (!isOpen || !card?.scryfallId) return
+
+		let alive = true
+
+		apiFetch(`/api/salt/${card.scryfallId}/me`)
+			.then((d) => {
+				if (!alive) return
+				setMySaltScore(d.value ?? 0)
+			})
+			.catch((e) => {
+				if (!alive) return
+				setError(e.message)
+			})
+
+		return () => {
+			alive = false
+		}
+	}, [isOpen, card?.scryfallId])
+
+	const setVote = async (value) => {
+		setError('')
+		setLoading(true)
+		try {
+			const data = await apiFetch(`/api/salt/${card.scryfallId}`, {
+				method: 'PUT',
+				body: JSON.stringify({ value }),
+			})
+			setMySaltScore(data.vote?.value ?? value)
+		} catch (e) {
+			setError(e.message)
+		} finally {
+			setLoading(false)
+		}
+	}
+
 	// Use escape key to close modal
 	React.useEffect(() => {
 		if (!isOpen) return
@@ -29,28 +70,67 @@ export function CardModal({ card, onClose, isOpen }) {
 				aria-label="Close card preview"
 			/>
 			<div className="fixed z-50 left-1/2 top-24 -translate-x-1/2 w-4/5 lg:w-2/3 2xl:w-3/5 rounded-xl shadow-xl flex flex-col gap-4 p-4 bg-mtg-blu">
-        <Button size='sm' variant='primary' className='self-end' onClick={onClose}>Close</Button>
-				<div className='flex flex-col md:flex-row justify-start w-full gap-4'>
-          <img
-            className="w-1/3 self-center flex-initial rounded-xl shadow-xl"
-            src={card.imageNormal ?? card.imageSmall}
-            alt={card.name}
-          />
-          <div className="md:w-2/3 flex flex-col items-start justify-between">
-            <h2 className='font-bold self-center md:self-start text-xl sm:text-2xl md:text-3xl 2xl:text-4xl mb-1'>{card.name}</h2>
-            <p className='self-center md:self-start 2xl:text-xl mb-6'>{card.typeLine}</p>
-            <p className='whitespace-pre-line mb-6 px-4 md:px-0 md:pr-8'>{card.oracleText}</p>
-            <div className='flex flex-col min-[535px]:flex-row gap-2 justify-between mt-auto w-full'>
-              <p className='self-center'><strong>Salt Score:<span className='tracking-[-.5rem]'>{card.salt ? '🧂' : '0️⃣'}</span></strong></p>
-              <div className='flex flex-col min-[535px]:flex-row gap-1'>
-                <Button size='sm' variant='primary' className='self-center'>+🧂</Button>
-                <Button size='sm' variant='primary' className='self-center'>++🧂</Button>
-                <Button size='sm' variant='primary' className='self-center'>Remove Salt</Button>
-              </div>
-            </div>
-          </div>
-        </div>
-
+				<Button
+					size="sm"
+					variant="primary"
+					className="self-end"
+					onClick={onClose}>
+					Close
+				</Button>
+				<div className="flex flex-col md:flex-row justify-start w-full gap-4">
+					<img
+						className="w-1/3 self-center flex-initial rounded-xl shadow-xl"
+						src={card.imageNormal ?? card.imageSmall}
+						alt={card.name}
+					/>
+					<div className="md:w-2/3 flex flex-col items-start justify-between">
+						<h2 className="font-bold self-center md:self-start text-xl sm:text-2xl md:text-3xl 2xl:text-4xl mb-1">
+							{card.name}
+						</h2>
+						<p className="self-center md:self-start 2xl:text-xl mb-6">
+							{card.typeLine}
+						</p>
+						<p className="whitespace-pre-line mb-6 px-4 md:px-0 md:pr-8">
+							{card.oracleText}
+						</p>
+						<div className="flex flex-col min-[535px]:flex-row gap-2 justify-between mt-auto w-full">
+							<p className="self-center">
+								<strong>
+									Salt Score:
+									<span className="tracking-[-.5rem]">
+										{card.saltTotal ? `${card.saltTotal}` : '0'}
+									</span>
+								</strong>
+							</p>
+							<div className="flex flex-col min-[535px]:flex-row gap-1">
+								<Button
+									size="sm"
+									variant="primary"
+									className={`${mySaltScore === 1 ? "border border-red-500" : ""} self-center`}
+									disabled={loading}
+									onClick={() => setVote(1)}>
+									+🧂
+								</Button>
+								<Button
+									size="sm"
+									variant="primary"
+									className={`${mySaltScore === 2 ? "border border-red-500" : ""} self-center`}
+									disabled={loading}
+									onClick={() => setVote(2)}>
+									++🧂
+								</Button>
+								<Button
+									size="sm"
+									variant="primary"
+									className={`${mySaltScore === 0 ? "border border-red-500" : ""} self-center`}
+									disabled={loading}
+									onClick={() => setVote(0)}>
+									Remove Salt
+								</Button>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</>
 	)

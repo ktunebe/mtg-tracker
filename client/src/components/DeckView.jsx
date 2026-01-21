@@ -57,11 +57,11 @@ export function DeckView() {
 					<h2>{`${label[section.type]} (${section.items.length})`}</h2>
 					<ul>
 						{section.items.map(({ line, card }) => (
-							<li key={line.cardId} className="flex gap-2">
+							<li key={line.scryfallId} className="flex gap-2">
 								<span className="w-10 text-right font-mono">{line.qty}x</span>
 								<button
 									type="button"
-									onClick={() => setCardOpen(line.cardId)}
+									onClick={() => setCardOpen(line.scryfallId)}
 									className="text-left hover:underline">
 									{card?.name ?? 'Unknown card'}
 								</button>
@@ -73,13 +73,13 @@ export function DeckView() {
 
 			{/* <ul className="space-y-2">
 				{deck.mainboard.map((line) => {
-					const card = cards[line.cardId]
+					const card = cards[line.scryfallId]
 					return (
-						<li key={line.cardId} className="flex gap-2">
+						<li key={line.scryfallId} className="flex gap-2">
 							<span className="w-10 text-right font-mono">{line.qty}x</span>
 							<button
 								type="button"
-								onClick={() => setCardOpen(line.cardId)}
+								onClick={() => setCardOpen(line.scryfallId)}
 								className="text-left hover:underline">
 								{card?.name ?? 'Unknown card'}
 							</button>

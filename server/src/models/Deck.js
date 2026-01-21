@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 const CardLineSchema = new mongoose.Schema(
   {
-    cardId: { type: String, required: true }, // Scryfall ID
+    scryfallId: { type: String, required: true }, // Scryfall ID
     qty: { type: Number, required: true, min: 1 }
   },
   { _id: false }

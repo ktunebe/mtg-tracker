@@ -58,16 +58,16 @@ export function AuthPage({ mode }) {
 
 			setToken(data.token)
       setUser(data.user)
-			navigate('/')
 		} catch (e2) {
 			setError(e2.message)
 		} finally {
 			setLoading(false)
+			navigate('/')
 		}
 	}
 
 	return (
-		<div className='border-4 rounded-3xl border-r-mtg-blu border-l-mtg-grn border-t-red-900 border-b-mtg-wht shadow-[0_15px_25px_#F8F6D8,15px_0_25px_#0E68AB,-15px_0_25px_#00733E,0_-15px_25px_#D3202A] mt-16 max-w-3/4 lg:max-w-3/5 mx-auto flex flex-col items-center justify-between'>
+		<div className='border-4 rounded-3xl bg-mtg-blk border-r-mtg-blu border-l-mtg-grn border-t-red-900 border-b-mtg-wht shadow-[0_15px_25px_#F8F6D8,15px_0_25px_#0E68AB,-15px_0_25px_#00733E,0_-15px_25px_#D3202A] mt-16 max-w-3/4 lg:max-w-3/5 mx-auto flex flex-col items-center justify-between'>
 			<div className='flex w-full'>
 				<Link to="/login" className='w-1/2'>
 					<Button className={`w-full rounded-tl-2xl ${mode === 'login' ? 'bg-red-900 hover:bg-red-900' : 'bg-bg hover:bg-surface2'}`}>Login</Button>

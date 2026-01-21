@@ -3,7 +3,7 @@ import {
 	BrowserRouter,
 	Routes,
 	Route,
-	Navigate,
+	useNavigate,
 	Outlet,
 } from 'react-router-dom'
 import { DeckList } from './components/DeckList.jsx'
@@ -16,6 +16,12 @@ import { logout } from './lib/auth.js'
 import { Button } from './components/Button.jsx'
 
 function Layout() {
+  const navigate = useNavigate()
+
+  function handleLogout() {
+    logout()
+    navigate('/')
+  }
 	return (
       <div className="min-h-screen bg-bg text-slate-100">
         <div className="mx-auto flex max-w-6xl">
@@ -32,7 +38,7 @@ function Layout() {
                 <Link to={`/login/`}>Sign up/Login</Link>
               </li>
               <li>
-                <Button onClick={logout}>Log Out</Button>
+                <Button onClick={handleLogout}>Log Out</Button>
               </li>
             </ul>
           </aside>

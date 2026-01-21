@@ -29,7 +29,7 @@ export function groupDeckLinesByType(deck, cardsMap) {
   const groups = new Map()
 
   for (const line of deck.mainboard ?? []) {
-    const card = cardsMap?.[line.cardId]
+    const card = cardsMap?.[line.scryfallId]
     const type = computeSortingType(card?.typeLine ?? "")
 
     if (!groups.has(type)) groups.set(type, [])

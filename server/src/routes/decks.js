@@ -196,12 +196,12 @@ decksRouter.post("/import", async (req, res) => {
 
   for (const p of parsed) {
     const key = `${p.set}:${p.collector_number}`
-    const cardId = idByKey.get(key)
-    if (!cardId) {
+    const scryfallId = idByKey.get(key)
+    if (!scryfallId) {
       missing.push(p)
       continue
     }
-    mainboard.push({ cardId, qty: p.qty })
+    mainboard.push({ scryfallId, qty: p.qty })
   }
 
   if (missing.length) {
@@ -244,8 +244,8 @@ decksRouter.post("/import", async (req, res) => {
   })
 
   // Hydrate cards for response
-  const cardIds = [...new Set(mainboard.map((l) => l.cardId))]
-  const cards = await Card.find({ scryfallId: { $in: cardIds } })
+  const scryfallIds = [...new Set(mainboard.map((l) => l.scryfallId))]
+  const cards = await Card.find({ scryfallId: { $in: scryfallIds } })
     .lean()
     .select(
       "scryfallId name set collectorNumber imageSmall imageNormal manaCost typeLine oracleText colors colorIdentity rarity scryfallUri"
@@ -267,14 +267,14 @@ decksRouter.get("/:id", async (req, res) => {
 
   if (!deck) return res.status(404).json({ error: "Not found" })
 
-  const cardIds = [
+  const scryfallIds = [
     ...new Set([
-      ...(deck.mainboard ?? []).map((l) => l.cardId),
-      ...(deck.sideboard ?? []).map((l) => l.cardId)
+      ...(deck.mainboard ?? []).map((l) => l.scryfallId),
+      ...(deck.sideboard ?? []).map((l) => l.scryfallId)
     ])
   ]
 
-  const cards = await Card.find({ scryfallId: { $in: cardIds } })
+  const cards = await Card.find({ scryfallId: { $in: scryfallIds } })
     .lean()
     .select(
       "scryfallId name set collectorNumber imageSmall imageNormal manaCost typeLine oracleText colors colorIdentity rarity scryfallUri"
