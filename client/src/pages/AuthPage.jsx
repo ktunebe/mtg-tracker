@@ -10,9 +10,6 @@ const initialFormData = {
 	displayName: '',
 }
 
-
-
-
 export function AuthPage({ mode }) {
 	const navigate = useNavigate()
 	const [formData, setFormData] = React.useState(initialFormData)
@@ -57,7 +54,7 @@ export function AuthPage({ mode }) {
 			})
 
 			setToken(data.token)
-      setUser(data.user)
+			setUser(data.user)
 		} catch (e2) {
 			setError(e2.message)
 		} finally {
@@ -67,19 +64,26 @@ export function AuthPage({ mode }) {
 	}
 
 	return (
-		<div className='border-4 rounded-3xl bg-mtg-blk border-r-mtg-blu border-l-mtg-grn border-t-red-900 border-b-mtg-wht shadow-[0_15px_25px_#F8F6D8,15px_0_25px_#0E68AB,-15px_0_25px_#00733E,0_-15px_25px_#D3202A] mt-16 max-w-3/4 lg:max-w-3/5 mx-auto flex flex-col items-center justify-between'>
-			<div className='flex w-full'>
-				<Link to="/login" className='w-1/2'>
-					<Button className={`w-full rounded-tl-2xl ${mode === 'login' ? 'bg-red-900 hover:bg-red-900' : 'bg-bg hover:bg-surface2'}`}>Login</Button>
+		<div className="border-4 rounded-3xl bg-mtg-blk border-r-mtg-blu border-l-mtg-grn border-t-red-900 border-b-mtg-wht shadow-[0_15px_25px_#F8F6D8,15px_0_25px_#0E68AB,-15px_0_25px_#00733E,0_-15px_25px_#D3202A] mt-16 max-w-3/4 lg:max-w-3/5 mx-auto flex flex-col items-center justify-between">
+			<div className="flex w-full">
+				<Link to="/login" className="w-1/2">
+					<Button
+						className={`w-full rounded-tl-2xl ${mode === 'login' ? 'bg-red-900 hover:bg-red-900' : 'bg-bg hover:bg-surface2'}`}>
+						Login
+					</Button>
 				</Link>
-				<Link to="/signup" className='w-1/2'>
-					<Button className={`w-full rounded-tr-2xl ${mode === 'signup' ? 'bg-red-900 hover:bg-red-900' : 'bg-bg hover:bg-surface2'}`}>Sign Up</Button>
+				<Link to="/signup" className="w-1/2">
+					<Button
+						className={`w-full rounded-tr-2xl ${mode === 'signup' ? 'bg-red-900 hover:bg-red-900' : 'bg-bg hover:bg-surface2'}`}>
+						Sign Up
+					</Button>
 				</Link>
 			</div>
 			<form onSubmit={handleSubmit} className="flex flex-col gap-3 p-8">
-				<div className='flex flex-col'>
+				<div className="flex flex-col">
 					<label htmlFor="email">Email: </label>
 					<input
+						id="email"
 						type="text"
 						name="email"
 						value={formData.email}
@@ -87,20 +91,23 @@ export function AuthPage({ mode }) {
 						className="border border-white px-1"
 					/>
 				</div>
-				<div className='flex flex-col'>
+				<div className="flex flex-col">
 					<label htmlFor="password">Password: </label>
 					<input
-						type="text"
+						id="password"
+						type="password"
 						name="password"
+						autoComplete="current-password"
 						value={formData.password}
 						onChange={handleFormChange}
 						className="border border-white px-1"
 					/>
 				</div>
 				{mode === 'signup' && (
-					<div className='flex flex-col'>
+					<div className="flex flex-col">
 						<label htmlFor="displayName">Select a display name:</label>
 						<input
+							id="displayName"
 							type="text"
 							name="displayName"
 							value={formData.displayName}
@@ -109,7 +116,7 @@ export function AuthPage({ mode }) {
 						/>
 					</div>
 				)}
-				<Button type="submit" disabled={loading} variant='secondary'>
+				<Button type="submit" disabled={loading} variant="secondary">
 					{loading
 						? 'Working...'
 						: mode === 'signup'
